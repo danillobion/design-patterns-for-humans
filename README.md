@@ -110,16 +110,10 @@ public class DoorFactory {
 }
 ```
 And then it can be used as
-```java
-public class Main {
-
-    public static void main(String[] args) {
-        Door door = DoorFactory.makeDoor(100, 200);
-        System.out.println("WIdth: "+door.getWidth());
-        System.out.println("Height: "+door.getHeight());
-    }
-
-}
+```php
+$door = DoorFactory::makeDoor(100, 200);
+echo 'Width: ' . $door->getWidth();
+echo 'Height: ' . $door->getHeight();
 ```
 
 **When to Use?**
@@ -788,128 +782,121 @@ Wikipedia says
 
 Taking our employees example from above. Here we have different employee types
 
-```java
-import java.util.List;
-import java.util.ArrayList;
-public interface iEmployee
+```php
+interface Employee
 {
-    //(String name, double salary);
-    public String getName();
-    public void setSalary(double salary);
-    public double getSalary();
-    public List<String> getRoles();
+    public function __construct(string $name, float $salary);
+    public function getName(): string;
+    public function setSalary(float $salary);
+    public function getSalary(): float;
+    public function getRoles(): array;
 }
 
-public class Developer implements iEmployee
+class Developer implements Employee
 {
-    protected double salary;
-    protected String name;
-    protected List<String> roles = new ArrayList<String>();
+    protected $salary;
+    protected $name;
+    protected $roles;
     
-    public Developer(String name, double salary)
+    public function __construct(string $name, float $salary)
     {
-        this.name = name;
-        this.salary = salary;
+        $this->name = $name;
+        $this->salary = $salary;
     }
-    @Override
-    public String getName()
+
+    public function getName(): string
     {
-        return this.name;
+        return $this->name;
     }
-    @Override
-    public void setSalary(double salary)
+
+    public function setSalary(float $salary)
     {
-        this.salary = salary;
+        $this->salary = $salary;
     }
-    @Override
-    public double getSalary()
+
+    public function getSalary(): float
     {
-        return this.salary;
+        return $this->salary;
     }
-    @Override
-    public List<String> getRoles()
+
+    public function getRoles(): array
     {
-        return this.roles;
+        return $this->roles;
     }
 }
 
-public class Designer implements iEmployee
+class Designer implements Employee
 {
-    protected double salary;
-    protected String name;
-    protected List<String> roles = new ArrayList<String>();
-    public Designer(String name, double salary)
+    protected $salary;
+    protected $name;
+    protected $roles;
+
+    public function __construct(string $name, float $salary)
     {
-        this.name = name;
-        this.salary = salary;
+        $this->name = $name;
+        $this->salary = $salary;
     }
-    @Override
-    public String getName()
+
+    public function getName(): string
     {
-        return this.name;
+        return $this->name;
     }
-    @Override
-    public void setSalary(double salary)
+
+    public function setSalary(float $salary)
     {
-        this.salary = salary;
+        $this->salary = $salary;
     }
-    @Override
-    public double getSalary()
+
+    public function getSalary(): float
     {
-        return this.salary;
+        return $this->salary;
     }
-    @Override
-    public List<String> getRoles()
+
+    public function getRoles(): array
     {
-        return this.roles;
+        return $this->roles;
     }
 }
 ```
 
 Then we have an organization which consists of several different types of employees
 
-```java
-import java.util.List;
-import java.util.ArrayList;
-public class Organization
+```php
+class Organization
 {
-    protected List<iEmployee> employees = new ArrayList<iEmployee>();
-    public void addEmployee(iEmployee employee)
+    protected $employees;
+
+    public function addEmployee(Employee $employee)
     {
-        this.employees.add(employee);
+        $this->employees[] = $employee;
     }
-    public double getNetSalaries()
+
+    public function getNetSalaries(): float
     {
-        double netSalary = 0;
-        for (iEmployee employee : this.employees) {
-            netSalary += employee.getSalary();
+        $netSalary = 0;
+
+        foreach ($this->employees as $employee) {
+            $netSalary += $employee->getSalary();
         }
-        return netSalary;
+
+        return $netSalary;
     }
 }
 ```
 
 And then it can be used as
 
-```java
-import java.util.List;
-import java.util.ArrayList;
-public class Composite
-{
-	public static void main(String[] args) 
-	{
-	    // Prepare the employees
-		iEmployee jonh = new Developer("John Doe", 12000);
-		iEmployee jane = new Designer("Jane Doe", 15000);
-		
-		// Add them to organization
-		Organization organization = new Organization();
-		organization.addEmployee(jonh);
-		organization.addEmployee(jane);
-		
-		System.out.println("Net salaries: " + organization.getNetSalaries());// Net Salaries: 27000
-	}
-}
+```php
+// Prepare the employees
+$john = new Developer('John Doe', 12000);
+$jane = new Designer('Jane Doe', 15000);
+
+// Add them to organization
+$organization = new Organization();
+$organization->addEmployee($john);
+$organization->addEmployee($jane);
+
+echo "Net salaries: " . $organization->getNetSalaries(); // Net Salaries: 27000
 ```
 
 ☕ Decorator
@@ -1129,15 +1116,15 @@ class KarakTea
 // Acts as a factory and saves the tea
 class TeaMaker
 {
-    protected availableTea = [];
+    protected $availableTea = [];
 
-    public preference[] make(preference)
+    public function make($preference)
     {
-        if (this.availableTea[preference].isEmpty() {
-            this.availableTea[preference] = new KarakTea();
+        if (empty($this->availableTea[$preference])) {
+            $this->availableTea[$preference] = new KarakTea();
         }
 
-        return this.availableTea[preference];
+        return $this->availableTea[$preference];
     }
 }
 ```
@@ -1147,23 +1134,23 @@ Then we have the `TeaShop` which takes orders and serves them
 ```php
 class TeaShop
 {
-    protected orders;
-    protected teaMaker;
+    protected $orders;
+    protected $teaMaker;
 
-    public  TeaShop(TeaMaker teaMaker)
+    public function __construct(TeaMaker $teaMaker)
     {
-        this.teaMaker = teaMaker;
+        $this->teaMaker = $teaMaker;
     }
 
-    public void takeOrder(string teaType, int table)
+    public function takeOrder(string $teaType, int $table)
     {
-        this.orders[table] = this.teaMaker.make(teaType);
+        $this->orders[$table] = $this->teaMaker->make($teaType);
     }
 
-    public void serve()
+    public function serve()
     {
-        foreach (this.orders+"as table"+tea) {
-          system.out.println( "Serving tea to table# "+table) ;
+        foreach ($this->orders as $table => $tea) {
+            echo "Serving tea to table# " . $table;
         }
     }
 }
@@ -1171,14 +1158,14 @@ class TeaShop
 And it can be used as below
 
 ```php
-teaMaker = new TeaMaker();
-shop = new TeaShop(teaMaker);
+$teaMaker = new TeaMaker();
+$shop = new TeaShop($teaMaker);
 
-shop.takeOrder("less sugar", 1);
-shop.takeOrder("more milk", 2);
-shop.takeOrder("without sugar", 5);
+$shop->takeOrder('less sugar', 1);
+$shop->takeOrder('more milk', 2);
+$shop->takeOrder('without sugar', 5);
 
-shop.serve();
+$shop->serve();
 // Serving tea to table# 1
 // Serving tea to table# 2
 // Serving tea to table# 5
@@ -1504,133 +1491,96 @@ Wikipedia says
 
 **Programmatic example**
 
-Translating our radio stations example from above. First of all we have `RadioStation`
+In PHP it is quite easy to implement using SPL (Standard PHP Library). Translating our radio stations example from above. First of all we have `RadioStation`
 
-```java
-public class RadioStation {
-    
-    private double frequency;
+```php
+class RadioStation
+{
+    protected $frequency;
 
-    public RadioStation(double freq) {
-        this.frequency = freq;
+    public function __construct(float $frequency)
+    {
+        $this->frequency = $frequency;
     }
 
-    public double getFrequency() {
-        return frequency;
+    public function getFrequency(): float
+    {
+        return $this->frequency;
+    }
+}
+```
+Then we have our iterator
+
+```php
+use Countable;
+use Iterator;
+
+class StationList implements Countable, Iterator
+{
+    /** @var RadioStation[] $stations */
+    protected $stations = [];
+
+    /** @var int $counter */
+    protected $counter;
+
+    public function addStation(RadioStation $station)
+    {
+        $this->stations[] = $station;
     }
 
-    @Override
-    public String toString() {
-        return "Frequency=" + this.frequency;
+    public function removeStation(RadioStation $toRemove)
+    {
+        $toRemoveFrequency = $toRemove->getFrequency();
+        $this->stations = array_filter($this->stations, function (RadioStation $station) use ($toRemoveFrequency) {
+            return $station->getFrequency() !== $toRemoveFrequency;
+        });
     }
-    
+
+    public function count(): int
+    {
+        return count($this->stations);
+    }
+
+    public function current(): RadioStation
+    {
+        return $this->stations[$this->counter];
+    }
+
+    public function key()
+    {
+        return $this->counter;
+    }
+
+    public function next()
+    {
+        $this->counter++;
+    }
+
+    public function rewind()
+    {
+        $this->counter = 0;
+    }
+
+    public function valid(): bool
+    {
+        return isset($this->stations[$this->counter]);
+    }
 }
 ```
+And then it can be used as
+```php
+$stationList = new StationList();
 
-Then we have our iterator interface and the collection interface
+$stationList->addStation(new RadioStation(89));
+$stationList->addStation(new RadioStation(101));
+$stationList->addStation(new RadioStation(102));
+$stationList->addStation(new RadioStation(103.2));
 
-```java
-public interface RadioStationIterator {
-
-	public boolean hasNext();
-	
-	public RadioStation next();
-
+foreach($stationList as $station) {
+    echo $station->getFrequency() . PHP_EOL;
 }
-```
 
-```java
-public interface RadioStationCollection {
-    
-    public void addRadioStation(RadioStation s);
-	
-    public void removeRadioStation(RadioStation s);
-	
-    public RadioStationIterator iterator();
-    
-}
-```
-
-And here goes the implementation of both interfaces
-
-```java
-public class RadioStationCollectionImpl implements RadioStationCollection {
-
-	private List<RadioStation> stationsList;
-
-	public RadioStationCollectionImpl() {
-		stationsList = new ArrayList<>();
-	}
-
-	public void addRadioStation(RadioStation s) {
-		this.stationsList.add(s);
-	}
-
-	public void removeRadioStation(RadioStation s) {
-		this.stationsList.remove(s);
-	}
-
-	@Override
-	public RadioStationIterator iterator() {
-		return new RadioStationIteratorImpl(this.stationsList);
-	}
-
-	private class RadioStationIteratorImpl implements RadioStationIterator {
-
-            private List<RadioStation> stations;
-            private int position;
-
-            public RadioStationIteratorImpl(List<RadioStation> stations) {
-                    this.stations = stations;
-            }
-
-            @Override
-            public boolean hasNext() {
-                if (position < stations.size())
-                    return true;
-                return false;
-            }
-
-            @Override
-            public RadioStation next() {
-                    RadioStation s = stations.get(position);
-                    position++;
-                    return s;
-            }
-
-	}
-}
-```
-
-That can be used as
-
-```java
-public class IteratorPatternTest {
-
-	public static void main(String[] args) {
-		RadioStationCollection stations = fillList();
-		RadioStationIterator i = stations.iterator();
-		while (i.hasNext()) {
-			RadioStation s = i.next();
-			System.out.println(s.toString());
-		}
-	}
-
-	private static RadioStationCollection fillList() {
-		RadioStationCollection stations = new RadioStationCollectionImpl();
-		stations.addRadioStation(new RadioStation(98.5));
-		stations.addRadioStation(new RadioStation(99.5));
-		stations.addRadioStation(new RadioStation(100.5));
-		stations.addRadioStation(new RadioStation(101.5));
-		stations.addRadioStation(new RadioStation(102.5));
-		stations.addRadioStation(new RadioStation(103.5));
-		stations.addRadioStation(new RadioStation(104.5));
-		stations.addRadioStation(new RadioStation(105.5));
-		stations.addRadioStation(new RadioStation(106.5));
-		return stations;
-	}
-
-}
+$stationList->removeStation(new RadioStation(89)); // Will remove station 89
 ```
 
 👽 Mediator
@@ -2042,61 +1992,62 @@ Wikipedia says
 
 Translating our example from above. First of all we have our strategy interface and different strategy implementations
 
-```php
-interface SortStrategy
+```java
+public interface SortStrategy
 {
-    public function sort(array $dataset): array;
+    public int[] sort(int[] dataset);
 }
 
-class BubbleSortStrategy implements SortStrategy
+
+public class BubbleSortStrategy implements SortStrategy
 {
-    public function sort(array $dataset): array
+    public int[] sort(int[] dataset)
     {
-        echo "Sorting using bubble sort";
+        System.out.println("Sorting using bubble sort");
 
         // Do sorting
-        return $dataset;
+        return dataset;
     }
 }
 
-class QuickSortStrategy implements SortStrategy
+public class QuickSortStrategy implements SortStrategy
 {
-    public function sort(array $dataset): array
+    public int[] sort(int[] dataset)
     {
-        echo "Sorting using quick sort";
+    	System.out.println("Sorting using quick sort");
 
         // Do sorting
-        return $dataset;
+        return dataset;
     }
 }
 ```
 
 And then we have our client that is going to use any strategy
-```php
-class Sorter
+```java
+public class Sorter
 {
-    protected $sorter;
+    protected SortStrategy sorter;
 
-    public function __construct(SortStrategy $sorter)
+    public Sorter(SortStrategy sorter)
     {
-        $this->sorter = $sorter;
+        this.sorter = sorter;
     }
 
-    public function sort(array $dataset): array
+    public int[] sort(int[] dataset)
     {
-        return $this->sorter->sort($dataset);
+        return this.sorter.sort(dataset);
     }
 }
 ```
 And it can be used as
-```php
-$dataset = [1, 5, 4, 3, 2, 8];
+```java
+int[] dataset = [1, 5, 4, 3, 2, 8];
 
-$sorter = new Sorter(new BubbleSortStrategy());
-$sorter->sort($dataset); // Output : Sorting using bubble sort
+Sorter sorter = new Sorter(new BubbleSortStrategy());
+sorter.sort(dataset); // Output : Sorting using bubble sort
 
-$sorter = new Sorter(new QuickSortStrategy());
-$sorter->sort($dataset); // Output : Sorting using quick sort
+Sorter sorter = new Sorter(new QuickSortStrategy());
+sorter.sort(dataset); // Output : Sorting using quick sort
 ```
 
 💢 State
